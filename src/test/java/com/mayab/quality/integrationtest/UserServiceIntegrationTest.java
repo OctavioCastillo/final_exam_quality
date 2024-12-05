@@ -14,7 +14,9 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.mayab.quality.dao.DAOUser;
 import com.mayab.quality.model.User;
@@ -160,8 +162,8 @@ public class UserServiceIntegrationTest extends DBTestCase {
 		
 		boolean deleted = service.deleteUser(1);
 		
-		try {		
-			assertEquals(deleted, true);
+		try {
+            assertTrue(deleted);
 			
 			IDatabaseConnection conn = getConnection();
 			IDataSet databaseDataSet = conn.createDataSet();
