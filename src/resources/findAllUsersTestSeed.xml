@@ -1,0 +1,5 @@
+<dataset>
+    <usuarios2024 id="1" name="TestUser1" email="user1@example.com" password="password123" />
+    <usuarios2024 id="2" name="TestUser2" email="user2@example.com" password="password456" />
+    <usuarios2024 id="3" name="TestUser3" email="user3@example.com" password="password789" />
+</dataset>
