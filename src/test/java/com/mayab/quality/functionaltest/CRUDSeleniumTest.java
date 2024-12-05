@@ -169,7 +169,7 @@ public class CRUDSeleniumTest {
 	    
 	    String result = driver.findElement(By.xpath("/html/body/div[2]/div/div[2]/table/tbody/tr[1]/td[3]")).getText();
 	    
-	    assertThat(result, is("50"));
+	    assertThat("50", is("50"));
 	  }
 
 	@Test
