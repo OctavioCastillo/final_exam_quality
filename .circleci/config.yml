@@ -47,7 +47,7 @@ jobs:
 
       - run:
           name: Run Test
-          command: mvn test -Dtest=UserServiceIntegrationTest
+          command: mvn test
 
       - store_test_results:
           path: target/surefire-reports
