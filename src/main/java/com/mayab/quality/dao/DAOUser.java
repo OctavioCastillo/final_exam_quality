@@ -48,11 +48,9 @@ public class DAOUser implements IDAOUser {
 			String username  = rs.getString(2);
 			String emailUser = rs.getString(3);
 			String password = rs.getString(4);
-			boolean isLogged = rs.getBoolean(5);
 
 			result = new User(username, emailUser, password);
 			result.setId(id);
-			result.setLogged(isLogged);
 
 			connection.close();
 			rs.close();
@@ -73,15 +71,13 @@ public class DAOUser implements IDAOUser {
 			// Declare statement query to run
 			PreparedStatement preparedStatement;
 			preparedStatement = connection
-					.prepareStatement("insert INTO usuarios2024(name,email,password,isLogged) values(?,?,?,?)",
+					.prepareStatement("insert INTO usuarios2024(name,email,password) values(?,?,?)",
 							Statement.RETURN_GENERATED_KEYS);
 			// Set the values to match in the ? on query
 			preparedStatement.setString(1, user.getName());
 			preparedStatement.setString(2, user.getEmail());
 			preparedStatement.setString(3, user.getPass());
-			preparedStatement.setBoolean(4, user.isLogged());
-
-			// Return the result of connection nad statement
+			// Return the result of connection and statement
 			if (preparedStatement.executeUpdate() >= 1) {
 				try(ResultSet rs = preparedStatement.getGeneratedKeys()){
 					if (rs.next()) {
@@ -124,11 +120,9 @@ public class DAOUser implements IDAOUser {
 			   int id = rs.getInt(1);
 			   String name = rs.getString(2);
 			   String email = rs.getString(3);
-			   String password = rs.getString(4);
-			   boolean log = rs.getBoolean(5);		 
+			   String password = rs.getString(4); 
 			   retrieved = new User(name, email,password);
 			   retrieved.setId(id);
-			   retrieved.setLogged(log);
 			   listaAlumnos.add(retrieved);
 		   }
 		   
@@ -164,11 +158,9 @@ public class DAOUser implements IDAOUser {
 			String username  = rs.getString(2);
 			String email = rs.getString(3);
 			String password = rs.getString(4);
-			boolean isLogged = rs.getBoolean(5);
 
 			result = new User(username, email, password);
 			result.setId(id);
-			result.setLogged(isLogged);
 
 			connection.close();
 			rs.close();

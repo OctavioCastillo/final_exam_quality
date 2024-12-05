@@ -17,7 +17,6 @@ import org.dbunit.operation.DatabaseOperation;
 import org.junit.jupiter.api.*;
 
 import com.mayab.quality.dao.DAOUser;
-import com.mayab.quality.dao.IDAOUser;
 import com.mayab.quality.model.User;
 import com.mayab.quality.service.UserService;
 
@@ -26,7 +25,7 @@ import junit.framework.AssertionFailedError;
 
 class UserServiceIntegrationTest extends DBTestCase {
 	
-	private IDAOUser dao;
+	private DAOUser dao;
 	private UserService service;
 
 	public UserServiceIntegrationTest() {
@@ -37,20 +36,52 @@ class UserServiceIntegrationTest extends DBTestCase {
 	
 	}
 	
-	@Override
-	protected IDataSet getDataSet() throws Exception {
-		return new FlatXmlDataSetBuilder().build(new FileInputStream("src/resources/initDB.xml"));
+	@BeforeEach
+	protected void setUp() throws Exception {
+		dao = new DAOUser(); 
+		service = new UserService(dao);
+		IDatabaseConnection connection = getConnection(); 
+		try {
+			DatabaseOperation.TRUNCATE_TABLE.execute(connection,getDataSet());
+			DatabaseOperation.CLEAN_INSERT.execute(connection, getDataSet());
+			
+		}catch(Exception e) {
+			fail("Error in setup: "+ e.getMessage());
+		}finally {
+			connection.close();
+		}
 	}
 	
-	@Override
-    protected DatabaseOperation getSetUpOperation() throws Exception {
-        return DatabaseOperation.CLEAN_INSERT;
+	protected IDataSet getDataSet() throws Exception
+    {
+        return new FlatXmlDataSetBuilder().build(new FileInputStream("src/resources/initDB.xml"));
     }
 	
-	@Override
-    protected DatabaseOperation getTearDownOperation() throws Exception {
-        return DatabaseOperation.DELETE_ALL;
-    }
+	@Test
+	public void createUser() throws Exception{
+		IDataSet seedDataSet = new FlatXmlDataSetBuilder().build(new FileInputStream("src/resources/createUserTestSeed.xml"));
+		DatabaseOperation.CLEAN_INSERT.execute(getConnection(), seedDataSet);
+
+		
+		User usuario = new User("max", "max@verstappen.com", "12345678910");
+		
+		service.createUser(usuario.getName(), usuario.getEmail(), usuario.getPassword());
+		
+		try {
+			IDatabaseConnection conn = getConnection();
+			IDataSet databaseDataSet = conn.createDataSet(); 
+			
+			ITable actualTable = databaseDataSet.getTable("usuarios2024");
+			
+			IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(new FileInputStream("src/resources/createUserTestExpected.xml"));
+			ITable expectedTable = expectedDataSet.getTable("usuarios2024");
+			
+			Assertion.assertEquals(expectedTable, actualTable);
+			
+		} catch (Exception e) {
+			fail("Error in insert test: " + e.getMessage());
+		}	
+	}
 	
 	
 	@Test
@@ -93,6 +124,56 @@ class UserServiceIntegrationTest extends DBTestCase {
 	    assertEquals("12345678910", foundUser.getPass());
 	}
 	
+	@Test
+	public void updateUser() throws Exception {
+		IDataSet seedDataSet = new FlatXmlDataSetBuilder().build(new FileInputStream("src/resources/updateUserTestSeed.xml"));
+		DatabaseOperation.CLEAN_INSERT.execute(getConnection(), seedDataSet);
+		
+		User user = new User("newUser", "oldUser@gmail.com", "9876543215");
+		user.setId(1);
+		
+		User newUser = service.updateUser(user);
+		
+		try {			
+			IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(new FileInputStream("src/resources/updateUserTestExpected.xml"));
+			ITable expectedTable = expectedDataSet.getTable("usuarios2024");
+			
+			String expectedId = (String) expectedTable.getValue(0, "id");
+			String expectedName = (String) expectedTable.getValue(0, "name");
+			String expectedPassword = (String) expectedTable.getValue(0, "password");
+			String expectedEmail = (String) expectedTable.getValue(0, "email");
+			
+			assertEquals(expectedId, Integer.toString(newUser.getId()));
+			assertEquals(expectedName, newUser.getName());
+			assertEquals(expectedPassword, newUser.getPassword());
+			assertEquals(expectedEmail, newUser.getEmail());
+			
+		} catch (Exception e) {
+			fail("Error in update test: " + e.getMessage());
+		}	
+	}
+	
+	@Test
+	public void deleteUser() throws Exception {
+		IDataSet seedDataSet = new FlatXmlDataSetBuilder().build(new FileInputStream("src/resources/deleteUserTestSeed.xml"));
+		DatabaseOperation.CLEAN_INSERT.execute(getConnection(), seedDataSet);
+		
+		boolean deleted = service.deleteUser(1);
+		
+		try {		
+			assertEquals(deleted, true);
+			
+			IDatabaseConnection conn = getConnection();
+			IDataSet databaseDataSet = conn.createDataSet();
+			ITable actualTable = databaseDataSet.getTable("usuarios2024");
+			int actualRows = actualTable.getRowCount();
+			
+			assertEquals(actualRows, 0);
+			
+		} catch (Exception e) {
+			fail("Error in delete test: " + e.getMessage());
+		}	
+	}
 	
 	@Test
 	void findAllUsersTest() throws Exception {
@@ -108,6 +189,4 @@ class UserServiceIntegrationTest extends DBTestCase {
 	    assertEquals("user1@example.com", users.get(0).getEmail());
 	    assertEquals("password123", users.get(0).getPass());
 	}
-	
-	
 }

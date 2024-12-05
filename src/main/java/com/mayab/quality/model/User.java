@@ -5,7 +5,6 @@ public class User {
 	private String name;
 	private String email;
 	private String pass;
-	private boolean isLogged;
 	
 	public String getPass() {
 		return pass;
@@ -21,7 +20,6 @@ public class User {
 		this.name = name;
 		this.email = email;
 		this.pass= pass;
-		this.isLogged = false;
 	}
 	
 	
@@ -40,12 +38,7 @@ public class User {
 	public void setPassword(String password) {
 		this.pass = password;
 	}
-	public boolean isLogged() {
-		return isLogged;
-	}
-	public void setLogged(boolean isLogged) {
-		this.isLogged = isLogged;
-	}
+	
 	public int getId() {
 		return id;
 	}
@@ -61,7 +54,6 @@ public class User {
 	
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", email=" + email + ", password=" + pass + ", isLogged="
-				+ isLogged + "]";
+		return "User [id=" + id + ", name=" + name + ", email=" + email + ", password=" + pass+"]";
 	}
 }
