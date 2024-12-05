@@ -31,10 +31,6 @@ jobs:
             mysql -h 127.0.0.1 -u root -p123456 calidad < src/resources/schema.sql
 
       - run:
-          name: Build without test
-          command: mvn -B -DskipTests clean package
-
-      - run:
           name: Run Test
           command: mvn test
 
