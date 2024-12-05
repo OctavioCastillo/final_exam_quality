@@ -1,9 +1,6 @@
 package com.mayab.quality.integrationtest;
 
 import java.io.FileInputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.Statement;
 import java.util.List;
 
 import org.dbunit.Assertion;
@@ -16,13 +13,10 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.mayab.quality.dao.DAOUser;
 import com.mayab.quality.model.User;
 import com.mayab.quality.service.UserService;
-
-import junit.framework.AssertionFailedError;
 
 
 public class UserServiceIntegrationTest extends DBTestCase {
@@ -32,7 +26,7 @@ public class UserServiceIntegrationTest extends DBTestCase {
 
 	public UserServiceIntegrationTest() {
 		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_DRIVER_CLASS,"com.mysql.cj.jdbc.Driver");
-		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL,"jdbc:mysql://localhost:3306/calidad");
+		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL,"jdbc:mysql://127.0.0.1:3306/calidad");
 		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_USERNAME,"root");
 		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_PASSWORD,"123456");	
 	
@@ -59,8 +53,7 @@ public class UserServiceIntegrationTest extends DBTestCase {
         return new FlatXmlDataSetBuilder().build(new FileInputStream("src/resources/initDB.xml"));
     }
 	
-	@Test
-	public void createUser() throws Exception{
+	public void testCreateUser() throws Exception{
 		IDataSet seedDataSet = new FlatXmlDataSetBuilder().build(new FileInputStream("src/resources/createUserTestSeed.xml"));
 		DatabaseOperation.CLEAN_INSERT.execute(getConnection(), seedDataSet);
 
@@ -86,8 +79,7 @@ public class UserServiceIntegrationTest extends DBTestCase {
 	}
 	
 	
-	@Test
-	void createUserTakenEmail() throws Exception {
+	public void testCreateUserTakenEmail() throws Exception {
 	    dao = new DAOUser();
 	    service = new UserService(dao);
 	    IDataSet seedDataSet = new FlatXmlDataSetBuilder().build(new FileInputStream("src/resources/createUserTakenEmailSeed.xml"));
@@ -98,8 +90,7 @@ public class UserServiceIntegrationTest extends DBTestCase {
 	    assertNull(result);
 	}
 	
-	@Test
-	void findUserByIdTest() throws Exception {
+	public void testFindUserByIdTest() throws Exception {
 	    dao = new DAOUser();
 	    service = new UserService(dao);
 	    IDataSet seedDataSet = new FlatXmlDataSetBuilder().build(new FileInputStream("src/resources/findUserByIdTestSeed.xml"));
@@ -112,8 +103,7 @@ public class UserServiceIntegrationTest extends DBTestCase {
 	    assertEquals("max@verstappen.com", foundUser.getEmail());
 	}
 	
-	@Test
-	void findUserByEmailTest() throws Exception {
+	public void testFindUserByEmailTest() throws Exception {
 	    dao = new DAOUser();
 	    service = new UserService(dao);
 	    IDataSet seedDataSet = new FlatXmlDataSetBuilder().build(new FileInputStream("src/resources/findUserByEmailTestSeed.xml"));
@@ -126,8 +116,7 @@ public class UserServiceIntegrationTest extends DBTestCase {
 	    assertEquals("12345678910", foundUser.getPass());
 	}
 	
-	@Test
-	public void updateUser() throws Exception {
+	public void testUpdateUser() throws Exception {
 		IDataSet seedDataSet = new FlatXmlDataSetBuilder().build(new FileInputStream("src/resources/updateUserTestSeed.xml"));
 		DatabaseOperation.CLEAN_INSERT.execute(getConnection(), seedDataSet);
 		
@@ -155,8 +144,7 @@ public class UserServiceIntegrationTest extends DBTestCase {
 		}	
 	}
 	
-	@Test
-	public void deleteUser() throws Exception {
+	public void testDeleteUser() throws Exception {
 		IDataSet seedDataSet = new FlatXmlDataSetBuilder().build(new FileInputStream("src/resources/deleteUserTestSeed.xml"));
 		DatabaseOperation.CLEAN_INSERT.execute(getConnection(), seedDataSet);
 		
@@ -177,8 +165,7 @@ public class UserServiceIntegrationTest extends DBTestCase {
 		}	
 	}
 	
-	@Test
-	void findAllUsersTest() throws Exception {
+	public void testFindAllUsersTest() throws Exception {
 	    dao = new DAOUser();
 	    service = new UserService(dao);
 	    IDataSet seedDataSet = new FlatXmlDataSetBuilder().build(new FileInputStream("src/resources/findAllUsersTestSeed.xml"));
