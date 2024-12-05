@@ -106,7 +106,7 @@ public class CRUDSeleniumTest {
 	    driver.findElement(By.xpath("//div[@id='root']/div/div[2]/button")).click();
 	    driver.findElement(By.name("name")).sendKeys("Yuki Tsunoda");
 	    driver.findElement(By.name("email")).sendKeys("ytsunoda@gmail.com");
-	    driver.findElement(By.name("age")).sendKeys("23");
+	    driver.findElement(By.name("age")).sendKeys("50");
 	    driver.findElement(By.xpath("/html/body/div[3]/div/div[2]/form/div[3]/div[2]/div")).click();
 	    driver.findElement(By.xpath("/html/body/div[3]/div/div[2]/form/div[3]/div[2]/div/div[2]/div[1]")).click();
 	    driver.findElement(By.xpath("/html/body/div[3]/div/div[2]/form/button")).click();
@@ -145,7 +145,7 @@ public class CRUDSeleniumTest {
 	    driver.findElement(By.xpath("//div[@id='root']/div/div[2]/button")).click();
 	    driver.findElement(By.name("name")).sendKeys("Oscar Piastri");
 	    driver.findElement(By.name("email")).sendKeys("opiastri@gmail.com");
-	    driver.findElement(By.name("age")).sendKeys("23");
+	    driver.findElement(By.name("age")).sendKeys("50");
 	    driver.findElement(By.xpath("/html/body/div[3]/div/div[2]/form/div[3]/div[2]/div")).click();
 	    driver.findElement(By.xpath("/html/body/div[3]/div/div[2]/form/div[3]/div[2]/div/div[2]/div[1]")).click();
 	    driver.findElement(By.xpath("/html/body/div[3]/div/div[2]/form/button")).click();
@@ -169,7 +169,7 @@ public class CRUDSeleniumTest {
 	    
 	    String result = driver.findElement(By.xpath("/html/body/div[2]/div/div[2]/table/tbody/tr[1]/td[3]")).getText();
 	    
-	    assertThat("50", is("50"));
+	    assertThat(result, is("50"));
 	  }
 
 	@Test
