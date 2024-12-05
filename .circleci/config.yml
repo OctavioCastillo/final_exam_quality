@@ -23,12 +23,17 @@ jobs:
 
       - run:
           name: Wait for MySQL
-          command: sleep 50
+          command: |
+            sleep 30
 
       - run:
           name: Create database schema
           command: |
             mysql -h 127.0.0.1 -u root -p123456 calidad < src/resources/schema.sql
+
+      - run:
+          name: Build without tests
+          command: mvn -B -DskipTests clean package
 
       - run:
           name: Run Test
