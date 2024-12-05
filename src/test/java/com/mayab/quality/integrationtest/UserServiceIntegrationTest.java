@@ -23,14 +23,14 @@ import com.mayab.quality.service.UserService;
 import junit.framework.AssertionFailedError;
 
 
-class UserServiceIntegrationTest extends DBTestCase {
+public class UserServiceIntegrationTest extends DBTestCase {
 	
 	private DAOUser dao;
 	private UserService service;
 
 	public UserServiceIntegrationTest() {
 		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_DRIVER_CLASS,"com.mysql.cj.jdbc.Driver");
-		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL,"jdbc:mysql://localhost:3307/calidad");
+		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL,"jdbc:mysql://localhost:3306/calidad");
 		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_USERNAME,"root");
 		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_PASSWORD,"123456");	
 	

@@ -14,6 +14,9 @@ jobs:
       # See: https://circleci.com/developer/images/image/cimg/openjdk
       - image: cimg/openjdk:17.0-browsers
       - image: cimg/mysql:8.0
+        enviroment:
+          MYSQL_ROOT_PASSWORD: 123456
+          MYSQL_DATABASE: calidad
 
     # Add steps to the job
     # See: https://circleci.com/docs/jobs-steps/#steps-overview & https://circleci.com/docs/configuration-reference/#steps
@@ -21,15 +24,42 @@ jobs:
       # Checkout the code as the first step.
       - checkout
 
-      # Use mvn clean and package as the standard maven build phase
-      #- run:
-      #    name: Build
-       #   command: mvn -B -DskipTests clean package
-      # Then run your tests!
-      #- run:
-      #    name: Test
-      #    command: mvn test
-      - run: echo "hola mundo"
+      - restore_cache:
+          keys:
+            - maven-repo-{{ checksum "pom.xml" }}
+
+      - run:
+        name: Install MySQL Client
+        command: sudo apt-get update && sudo apt-get install -y mysql-client
+
+      - run:
+          name: Wait for MySQL
+          command: |
+            sleep 30
+
+      - run:
+          name: Create database schema
+          command: |
+            mysql -h 127.0.0.1 -u root -p123456 calidad < src/resources/schema.sql
+
+      - run:
+          name: Build without test
+          command: mvn -B DskipTests clean package
+
+      - run:
+          name: Run Test
+          command: mvn test
+
+      - store_test_results:
+          path: target/surefire-reports
+
+      - store_artifacts:
+          path: target
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: maven-repo-{{ chacksum "pom.xml" }}
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/workflows/ & https://circleci.com/docs/configuration-reference/#workflows
