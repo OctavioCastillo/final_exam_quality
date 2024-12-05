@@ -4,8 +4,8 @@ version: 2.1
 jobs:
   build-and-test:
     docker:
-      - image: cimg/openjdk:17.0-browsers
-      - image: cimg/mysql:8.0
+      - image: cimg/openjdk:11.0
+      - image: cimg/mysql:5.7
         environment:
           MYSQL_ROOT_PASSWORD: 123456
           MYSQL_DATABASE: calidad
