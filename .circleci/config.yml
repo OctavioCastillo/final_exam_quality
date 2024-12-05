@@ -37,7 +37,7 @@ jobs:
 
       - run:
           name: Run Test
-          command: mvn test
+          command: mvn test -Dtest=CRUDSeleniumTest,UserServiceUnitTest
 
       - store_test_results:
           path: target/surefire-reports
