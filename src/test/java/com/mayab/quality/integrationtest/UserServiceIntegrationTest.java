@@ -76,12 +76,12 @@ public class UserServiceIntegrationTest extends DBTestCase {
 			IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(new FileInputStream("src/resources/createUserTestExpected.xml"));
 			ITable expectedTable = expectedDataSet.getTable("usuarios2024");
 			
-			assertEquals("2", "2");
+			Assertion.assertEquals(expectedTable, actualTable);
 			
 		} catch (Exception e) {
 			fail("Error in insert test: " + e.getMessage());
 		}	
-	}/*
+	}
 	
 	
 	@Test
@@ -189,5 +189,4 @@ public class UserServiceIntegrationTest extends DBTestCase {
 	    assertEquals("user1@example.com", users.get(0).getEmail());
 	    assertEquals("password123", users.get(0).getPass());
 	}
-	 */
 }
