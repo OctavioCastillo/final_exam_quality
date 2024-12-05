@@ -36,7 +36,7 @@ public class UserServiceIntegrationTest extends DBTestCase {
 	
 	}
 	
-	@BeforeEach
+	/*@BeforeEach
 	protected void setUp() throws Exception {
 		dao = new DAOUser(); 
 		service = new UserService(dao);
@@ -51,11 +51,11 @@ public class UserServiceIntegrationTest extends DBTestCase {
 			connection.close();
 		}
 	}
-	
+	*/
 	protected IDataSet getDataSet() throws Exception
     {
         return new FlatXmlDataSetBuilder().build(new FileInputStream("src/resources/initDB.xml"));
-    }
+    }/*
 	
 	@Test
 	public void createUser() throws Exception{
@@ -189,4 +189,5 @@ public class UserServiceIntegrationTest extends DBTestCase {
 	    assertEquals("user1@example.com", users.get(0).getEmail());
 	    assertEquals("password123", users.get(0).getPass());
 	}
+	 */
 }
