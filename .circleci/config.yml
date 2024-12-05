@@ -1,27 +1,16 @@
 # Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/configuration-reference
 version: 2.1
 
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/jobs-steps/#jobs-overview & https://circleci.com/docs/configuration-reference/#jobs
 jobs:
-  # Below is the definition of your job to build and test your app, you can rename and customize it as you want.
   build-and-test:
-    # Specify the execution environment. You can specify an image from Docker Hub or use one of our convenience images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/executor-intro/ & https://circleci.com/docs/configuration-reference/#executor-job
     docker:
-      # Specify the version you desire here
-      # See: https://circleci.com/developer/images/image/cimg/openjdk
       - image: cimg/openjdk:17.0-browsers
       - image: cimg/mysql:8.0
         environment:
           MYSQL_ROOT_PASSWORD: 123456
           MYSQL_DATABASE: calidad
 
-    # Add steps to the job
-    # See: https://circleci.com/docs/jobs-steps/#steps-overview & https://circleci.com/docs/configuration-reference/#steps
     steps:
-      # Checkout the code as the first step.
       - checkout
 
       - restore_cache:
@@ -29,13 +18,12 @@ jobs:
             - maven-repo-{{ checksum "pom.xml" }}
 
       - run:
-        name: Install MySQL Client
-        command: sudo apt-get update && sudo apt-get install -y mysql-client
+          name: Install MySQL Client
+          command: sudo apt-get update && sudo apt-get install -y mysql-client
 
       - run:
           name: Wait for MySQL
-          command: |
-            sleep 30
+          command: sleep 30
 
       - run:
           name: Create database schema
@@ -44,7 +32,7 @@ jobs:
 
       - run:
           name: Build without test
-          command: mvn -B DskipTests clean package
+          command: mvn -B -DskipTests clean package
 
       - run:
           name: Run Test
@@ -59,12 +47,9 @@ jobs:
       - save_cache:
           paths:
             - ~/.m2
-          key: maven-repo-{{ chacksum "pom.xml" }}
+          key: maven-repo-{{ checksum "pom.xml" }}
 
-# Orchestrate jobs using workflows
-# See: https://circleci.com/docs/workflows/ & https://circleci.com/docs/configuration-reference/#workflows
 workflows:
-  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
-    # Inside the workflow, you define the jobs you want to run.
+  sample:
     jobs:
       - build-and-test
