@@ -23,7 +23,7 @@ jobs:
 
       - run:
           name: Wait for MySQL
-          command: sleep 30
+          command: sleep 50
 
       - run:
           name: Create database schema
