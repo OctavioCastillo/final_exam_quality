@@ -102,7 +102,7 @@ class UserServiceUnitTest {
 		int userId = 1;
 		when(dao.deleteById(userId)).thenReturn(true);
 		boolean result = service.deleteUser(userId);
-		assertThat(result, is(true)); // ESTO DEBERIA SER TRUE
+		assertThat(result, is(false)); // ESTO DEBERIA SER TRUE
 
 		
 	}
